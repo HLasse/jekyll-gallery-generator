@@ -99,7 +99,7 @@ module Jekyll
         gallery_index = File.join(File.dirname(__FILE__), "gallery_index.html")
       end
       self.read_yaml(File.dirname(gallery_index), File.basename(gallery_index))
-      self.data["title"] = config["title"] || "Photos"
+      self.data["title"] = config["title"] || "Billeder"
       self.data["galleries"] = []
       begin
         sort_field = config["sort_field"] || "date_time"
@@ -160,7 +160,7 @@ module Jekyll
       end
       self.read_yaml(File.dirname(gallery_page), File.basename(gallery_page))
       self.data["gallery"] = gallery_name
-      gallery_title_prefix = config["title_prefix"] || "Photos: "
+      gallery_title_prefix = config["title_prefix"] || ""
       gallery_name = gallery_name.gsub(/[_-]/, " ").gsub(/\w+/) {|word| word.capitalize}
       begin
         gallery_name = gallery_config["name"] || gallery_name
