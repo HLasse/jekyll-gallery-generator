@@ -123,7 +123,7 @@ module Jekyll
       end
       self.read_yaml(File.dirname(gallery_page), File.basename(gallery_page))
       self.data["gallery"] = gallery_name
-      gallery_title_prefix = config["title_prefix"] || ""
+      gallery_title_prefix = config["title_prefix"] || "Galleri"
       gallery_name = gallery_name.gsub(/[_-]/, " ").gsub(/\w+/) {|word| word.capitalize}
       begin
         gallery_name = gallery_config["name"] || gallery_name
@@ -238,14 +238,14 @@ module Jekyll
 
   def generate(site)
     config = site.config["gallery"] || {}
-    dir = config["dir"] || "photos"
+    dir = config["dir"] || "galleri"
     galleries = []
     original_dir = Dir.getwd
     Dir.chdir(site.source)
 
     begin
       # Just build one gallery from the photos folder itself
-      gallery = GalleryPage.new(site, site.source, dir, "photos")
+      gallery = GalleryPage.new(site, site.source, dir, "galleri")
       gallery.render(site.layouts, site.site_payload)
       gallery.write(site.dest)
       site.pages << gallery
