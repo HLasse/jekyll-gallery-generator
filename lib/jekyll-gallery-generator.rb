@@ -85,43 +85,6 @@ module Jekyll
     end
   end
 
-  class GalleryIndex < ReadYamlPage
-    def initialize(site, base, dir, galleries)
-      @site = site
-      @base = base
-      @dir = dir.gsub("source/", "")
-      @name = "index.html"
-      config = site.config["gallery"] || {}
-
-      self.process(@name)
-      gallery_index = File.join(base, "_layouts", "gallery_index.html")
-      unless File.exist?(gallery_index)
-        gallery_index = File.join(File.dirname(__FILE__), "gallery_index.html")
-      end
-      self.read_yaml(File.dirname(gallery_index), File.basename(gallery_index))
-      self.data["title"] = config["title"] || "Billeder"
-      self.data["galleries"] = []
-      begin
-        sort_field = config["sort_field"] || "date_time"
-        galleries.sort! {|a,b|
-          cmp = b.data[sort_field] <=> a.data[sort_field]
-          # Tie goes to first alphabetically. The different order (a<=>b) is intentional.
-          cmp == 0 ? a.data["name"] <=> b.data["name"] : cmp
-        }
-      rescue Exception => e
-        puts "Error sorting galleries: #{e}"
-        puts e.backtrace
-      end
-      if config["sort_reverse"]
-        galleries.reverse!
-      end
-      galleries.each {|gallery|
-        unless gallery.hidden
-          self.data["galleries"].push(gallery.data)
-        end
-      }
-    end
-  end
 
   class GalleryPage < ReadYamlPage
     attr_reader :hidden
@@ -294,11 +257,6 @@ module Jekyll
 
     Dir.chdir(original_dir)
 
-    # If you don’t want an extra index page, comment out the block below
-    # gallery_index = GalleryIndex.new(site, site.source, dir, galleries)
-    # gallery_index.render(site.layouts, site.site_payload)
-    # gallery_index.write(site.dest)
-    # site.pages << gallery_index
   end
 end
 end
