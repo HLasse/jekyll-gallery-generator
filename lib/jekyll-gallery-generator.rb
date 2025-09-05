@@ -279,27 +279,33 @@ module Jekyll
       galleries = []
       original_dir = Dir.getwd
       Dir.chdir(site.source)
-      begin
-        Dir.foreach(dir) do |gallery_dir|
-          gallery_path = File.join(dir, gallery_dir)
-          if File.directory?(gallery_path) and gallery_dir.chars.first != "."
-            gallery = GalleryPage.new(site, site.source, gallery_path, gallery_dir)
-            gallery.render(site.layouts, site.site_payload)
-            gallery.write(site.dest)
-            site.pages << gallery
-            galleries << gallery
-          end
-        end
+      # begin
+      #   Dir.foreach(dir) do |gallery_dir|
+      #     gallery_path = File.join(dir, gallery_dir)
+      #     if File.directory?(gallery_path) and gallery_dir.chars.first != "."
+      #       gallery = GalleryPage.new(site, site.source, gallery_path, gallery_dir)
+      #       gallery.render(site.layouts, site.site_payload)
+      #       gallery.write(site.dest)
+      #       site.pages << gallery
+      #       galleries << gallery
+      #     end
+      #   end
+      # Just build one gallery from the photos folder
+      gallery = GalleryPage.new(site, site.source, dir, "photos")
+      gallery.render(site.layouts, site.site_payload)
+      gallery.write(site.dest)
+      site.pages << gallery
+      galleries << gallery
       rescue Exception => e
         puts "Error generating galleries: #{e}"
         puts e.backtrace
       end
       Dir.chdir(original_dir)
 
-      gallery_index = GalleryIndex.new(site, site.source, dir, galleries)
-      gallery_index.render(site.layouts, site.site_payload)
-      gallery_index.write(site.dest)
-      site.pages << gallery_index
+      # gallery_index = GalleryIndex.new(site, site.source, dir, galleries)
+      # gallery_index.render(site.layouts, site.site_payload)
+      # gallery_index.write(site.dest)
+      # site.pages << gallery_index
     end
   end
 end
